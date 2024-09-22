@@ -5,7 +5,7 @@ import close from '../assets/close.svg'
 import ReactLoading from "react-loading";
 import file from '../assets/file.svg'
 import table from '../assets/table.svg'
-import { categories, poll, user, view, vote } from './vote';
+import { categories, poll, user, view, vote, vote1 } from './vote';
 import axios from 'axios';
 import { apiLink } from '../config/Config';
 // import Plotly from 'plotly.js/dist/plotly'
@@ -18,13 +18,11 @@ const StatsPage = () => {
     const location = useLocation();
 
     // var srch = false;
+    var poll1 = []
 
-    // for (let i = 0; i < vote.length && !srch; i++) {
-    //     if (location.state.id === vote[i].id) {
-    //         poll = vote[i];
-    //         srch = true;
-    //     }
-    // }
+    for (let i = 0; i < vote1.length; i++) {
+        poll1 = vote1[i];
+    }
 
     if (typeof view.get('view') === 'undefined') {
         view.set('view', 'table');
@@ -50,20 +48,20 @@ const StatsPage = () => {
     //     }
     // }
 
-    for (const variant in poll.variants) {
+    for (const variant in poll1.variants) {
         var whole = 0;
-        for (let j = 0; j < poll.variants[variant].length; j++) {
-            whole += poll.variants[variant][j];
+        for (let j = 0; j < poll1.variants[variant].length; j++) {
+            whole += poll1.variants[variant][j];
         }
         var biggest = -1;
         var biggestIndex = 0;
-        for (let j = 0; j < poll.variants[variant].length; j++) {
-            poll.percentage[variant][j] = (poll.variants[variant][j] / whole * 100).toFixed(1);
-            if (parseFloat(poll.percentage[variant][j]) > parseFloat(biggest)) {
-                biggest = poll.percentage[variant][j];
+        for (let j = 0; j < poll1.variants[variant].length; j++) {
+            poll1.percentage[variant][j] = (poll1.variants[variant][j] / whole * 100).toFixed(1);
+            if (parseFloat(poll1.percentage[variant][j]) > parseFloat(biggest)) {
+                biggest = poll1.percentage[variant][j];
                 biggestIndex = j;
             }
-            poll.biggestIndex[variant] = biggestIndex;
+            poll1.biggestIndex[variant] = biggestIndex;
             // x[j] = poll.percentage[variant][j];
         }
     }
@@ -163,64 +161,60 @@ const StatsPage = () => {
                         <div className='header'>id{location.state.id}</div>
                         <span className='another' />
                     </div>
-                    {poll.length > 0 ? (
-                        <div>
-                            <div className='variants'>{poll.name}</div>
-                            {/* <div className='textLine'>
-                                <div className={view.get('view') === 'table' ? 'switchButtonActive' : 'switchButton'} onClick={() => switchView('table')}>Таблица</div>
-                                <div className={view.get('view') === 'hist' ? 'switchButtonActive' : 'switchButton'} onClick={() => switchView('hist')}>Гистограмма</div>
-                            </div> */}
-                            <div className='authBlock'>
-                                <div className='tableBlock'>
-                                <table>
-                                    <tr>
-                                        <th colSpan={7}>Количественная оценка</th>
-                                    </tr>
-                                    <tr>
-                                        <th></th>
-                                        <th>Обязательные</th>
-                                        <th>Важные</th>
-                                        <th>Интересные</th>
-                                        <th>Безразличные</th>
-                                        <th>Сомнительные</th>
-                                        <th>Категория</th>
-                                    </tr>
-                                    {
-                                        Object.keys(poll.variants).map(item => (
-                                            <tr>
-                                                <th>{item}</th>
-                                                <td className={poll.biggestIndex[item] === 0 ? 'greenCell' : ''}>{poll.percentage[item][0]}%</td>
-                                                <td className={poll.biggestIndex[item] === 1 ? 'greenCell' : ''}>{poll.percentage[item][1]}%</td>
-                                                <td className={poll.biggestIndex[item] === 2 ? 'greenCell' : ''}>{poll.percentage[item][2]}%</td>
-                                                <td className={poll.biggestIndex[item] === 3 ? 'greenCell' : ''}>{poll.percentage[item][3]}%</td>
-                                                <td className={poll.biggestIndex[item] === 4 ? 'greenCell' : ''}>{poll.percentage[item][4]}%</td>
-                                                <th>{categories[poll.biggestIndex[item]]}</th>
-                                            </tr>
-                                        ))
-                                    }
-                                </table>
-                                </div>
-                            </div>
-                            {/* <div className='authBlock' id='myDiv'>
-                            </div> */}
-                            <div className='statsBlock'>
-                                <div className='homeButton' onClick={() => upload('excel')}>
-                                    <img src={table}
-			                		alt='excel'
-			                		className='uploadIcon' />
-                                    <div className='uploadText'>Выгрузка в Excel</div>
-                                </div>
-                                <div className='homeButton' onClick={() => upload('json')}>
-                                    <img src={file}
-			                		alt='json'
-			                		className='uploadIcon' />
-                                    <div className='uploadText'>Выгрузка в JSON</div>
-                                </div>
+                    <div>
+                        <div className='variants'>{poll1.name}</div>
+                        {/* <div className='textLine'>
+                            <div className={view.get('view') === 'table' ? 'switchButtonActive' : 'switchButton'} onClick={() => switchView('table')}>Таблица</div>
+                            <div className={view.get('view') === 'hist' ? 'switchButtonActive' : 'switchButton'} onClick={() => switchView('hist')}>Гистограмма</div>
+                        </div> */}
+                        <div className='authBlock'>
+                            <div className='tableBlock'>
+                            <table>
+                                <tr>
+                                    <th colSpan={7}>Количественная оценка</th>
+                                </tr>
+                                <tr>
+                                    <th></th>
+                                    <th>Обязательные</th>
+                                    <th>Важные</th>
+                                    <th>Интересные</th>
+                                    <th>Безразличные</th>
+                                    <th>Сомнительные</th>
+                                    <th>Категория</th>
+                                </tr>
+                                {
+                                    Object.keys(poll1.variants).map(item => (
+                                        <tr>
+                                            <th>{item}</th>
+                                            <td className={poll1.biggestIndex[item] === 0 ? 'greenCell' : ''}>{poll1.percentage[item][0]}%</td>
+                                            <td className={poll1.biggestIndex[item] === 1 ? 'greenCell' : ''}>{poll1.percentage[item][1]}%</td>
+                                            <td className={poll1.biggestIndex[item] === 2 ? 'greenCell' : ''}>{poll1.percentage[item][2]}%</td>
+                                            <td className={poll1.biggestIndex[item] === 3 ? 'greenCell' : ''}>{poll1.percentage[item][3]}%</td>
+                                            <td className={poll1.biggestIndex[item] === 4 ? 'greenCell' : ''}>{poll1.percentage[item][4]}%</td>
+                                            <th>{categories[poll1.biggestIndex[item]]}</th>
+                                        </tr>
+                                    ))
+                                }
+                            </table>
                             </div>
                         </div>
-                    ) : (
-                        <div className='header'>В опросе ещё никто не участвовал</div>
-                    )}                    
+                        {/* <div className='authBlock' id='myDiv'>
+                        </div> */}
+                        <div className='statsBlock'>
+                            <div className='homeButton' onClick={() => upload('excel')}>
+                                <img src={table}
+			            		alt='excel'
+			            		className='uploadIcon' />
+                                <div className='uploadText'>Выгрузка в Excel</div>
+                            </div>
+                            <div className='homeButton' onClick={() => upload('json')}>
+                                <img src={file}
+			            		alt='json'
+			            		className='uploadIcon' />
+                                <div className='uploadText'>Выгрузка в JSON</div>
+                            </div>
+                        </div>
+                    </div>
                     {/* {Object.keys(poll.variants).map(item => (
                         <div className='stats'>
                             <div className='variantCard'>
