@@ -2,7 +2,7 @@ import './Style.css';
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import ReactLoading from "react-loading";
-import { view } from './vote';
+import { user, view } from './vote';
 import axios from 'axios';
 
 const Auth = () => {
@@ -25,29 +25,33 @@ const Auth = () => {
             if (password !== '') {
                 try {
                     if (mode === 'auth') {
-                        var response = await axios.post(`http://kologermit.ru:9002/admin/log-in-admin`, {
-                            "username": login,
-                            "password": password
+                        var response = await axios.post(`http://kologermit.ru:9002/admin/login/`, {
+                            "name": login,
+                            "hash": password
                         }, {
                             headers: {
                                 'Content-Type': 'application/json'
                             }
                         })
                         if (response.status === 200) {
+                            user.set('token', response.data.data.token);
+                            user.set('name', response.data.data.name);
                             navigate('Home', { replace: false });
                         } else {
                             alert('Ошибка авторизации, попробуйте ещё раз');
                         }
                     } else {
-                        var response = await axios.post(`http://kologermit.ru:9002/admin/sign-in-admin`, {
-                            "username": login,
-                            "password": password
+                        var response = await axios.post(`http://kologermit.ru:9002/admin/signin/`, {
+                            "name": login,
+                            "hash": password
                         }, {
                             headers: {
                                 'Content-Type': 'application/json'
                             }
                         }) 
                         if (response.status === 200) {
+                            user.set('token', response.data.data.token);
+                            user.set('name', response.data.data.name);
                             navigate('Home', { replace: false });
                         } else {
                             alert('Ошибка регистрации, попробуйте ещё раз');
@@ -55,6 +59,7 @@ const Auth = () => {
                     }
                 } catch (e) {
                     // console.log(e)
+                    alert('Ошибка при выполнении запроса, попробуйте ещё раз');
                 }
             } else {
                 alert('Необходимо указать пароль');

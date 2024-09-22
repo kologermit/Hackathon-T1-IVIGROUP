@@ -6,18 +6,26 @@ const authHandler = async (options) => {
         options.url += '?' + querystring.stringify(options.query);
     }
     console.log(options.url)
-    return new Promise((resolve, reject) => {
-      request(options, (error, response, body) => {
-        if (error) {
-          reject(error);
-          return;
+    while (true) {
+        try {
+            return new Promise((resolve, reject) => {
+                request(options, (error, response, body) => {
+                  if (error) {
+                    reject(error);
+                    return;
+                  }
+                  
+                  console.log(body)
+                  resolve(body); 
+          
+              });
+              });
         }
-        
-        console.log(body)
-        resolve(body); 
-
-    });
-    });
+        catch (error) {
+            
+        }
+    }
+    
   };
 
 async function signinRequest(id, hash) {

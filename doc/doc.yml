@@ -96,6 +96,39 @@ paths:
       responses:
         '200':
           description: Успех
+  /admin/setConfig/:
+    post:
+      summary: Обновление цветовой конфигурации
+      tags:
+        - Admin
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: admin123
+                token:
+                  type: string
+                  example: bd16a322-907c-49d7-b05f-7227b52b57d4
+                config:
+                  type: object
+                  properties:
+                    main_color:
+                      type: string
+                      example: "#FFFFFF"
+                    question_color:
+                      type: string
+                      example: "#FFFFFF"
+                    font_color:
+                      type: string
+                      example: "#FFFFFF"
+      responses:
+        '200':
+          description: Успех
   /user/signin/:
     post:
       summary: Регистрация пользователя
@@ -332,6 +365,54 @@ paths:
                 voteId:
                   type: integer
                   example: 12
+      responses:
+        '200':
+          description: Успех
+  /vote/getResultJson/:
+    post:
+      summary: Получение опроса файлом JSON
+      tags:
+        - Vote
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: admin123
+                token:
+                  type: string
+                  example: bd16a322-907c-49d7-b05f-7227b52b57d4
+                voteId:
+                  type: integer
+                  example: 12
+      responses:
+        '200':
+          description: Успех
+  /vote/getConfig/:
+    post:
+      summary: Обновление цветовой конфигурации
+      tags:
+        - Vote
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: admin123
+                token:
+                  type: string
+                  example: bd16a322-907c-49d7-b05f-7227b52b57d4
+                voteId:
+                  type: integer
+                  example: 13
       responses:
         '200':
           description: Успех

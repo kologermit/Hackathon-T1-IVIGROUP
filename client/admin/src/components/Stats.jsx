@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import close from '../assets/close.svg'
 import ReactLoading from "react-loading";
-import { vote } from './vote';
+import { user, vote } from './vote';
 import axios from 'axios';
 
 const Stats = () => {
@@ -18,12 +18,21 @@ const Stats = () => {
     useEffect(() => {
         async function getVoteInfo() {
             try {
-                var response  = await axios.get('http://kologermit.ru:9002/vote/get-result')
+                var response  = await axios.post('http://kologermit.ru:9002/vote/adminVotes/', {
+                    "name": user.get('name'),
+                    "token": user.get('token'),
+                }, {
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
                 if (response.status === 200) {
+                    console.log(response);
                     // vote = response.body;
                 }
                 setAppState(response);
             } catch (e) {
+                alert('Ошибка при выполнении запроса, попробуйте ещё раз');
                 // console.log(e)
             }
         }

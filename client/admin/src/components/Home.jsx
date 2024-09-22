@@ -3,12 +3,13 @@ import React from 'react'
 import plus from '../assets/plus.svg'
 import graph from '../assets/graph.svg'
 import { useNavigate } from 'react-router-dom';
-import { questions } from './vote';
+import { questions, view } from './vote';
 
 const Home = () => {
     let navigate = useNavigate();
 
     const openCreatePage = () => {
+        view.set('selectColor', false);
         while (questions.length > 1) {
             questions.pop();
         }

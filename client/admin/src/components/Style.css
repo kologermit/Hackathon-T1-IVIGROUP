@@ -320,3 +320,11 @@ table {
     padding-top: 2px;
     transform: scale(1.1);
 }
+
+.loadScreen {
+    margin-top: 40vh;
+    display: flex;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+}

@@ -20,8 +20,10 @@ var categories = {
     4: "Сомнительные"
 }
 
-var view = new Map()
+var view = new Map();
 
 var questions = [['', '']]
 
-module.exports = { vote, questions, categories, view }; 
+var user = new Map();
+
+module.exports = { vote, questions, categories, view, user }; 

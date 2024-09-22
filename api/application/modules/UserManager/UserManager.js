@@ -24,7 +24,9 @@ class UserManager {
     }
 
     async adminLogin(name, hash){
-        const user = await this.db.getUserByName(name)         
+        const user = await this.db.getUserByName(name)      
+        console.log(3)
+        console.log(user)   
         if(hash === user.hash) {
             const auth = await this.authHandler.signinRequest(user.id, hash);
             return {
@@ -62,6 +64,27 @@ class UserManager {
             }
         }
         return 400
+    }
+
+    async adminSetConfig(name, token, config){
+        const user = await this.db.getUserByName(name)         
+        const auth = await this.authHandler.authRequest(user.id, token);
+        if(auth.status != 200) {
+            return 400
+        }
+        try {
+            console.log(config.main_color)
+            console.log(config.question_color)
+            console.log(config.font_color)
+        } catch (error) {
+            return 400
+        }
+        this.db.setConfig(name, config)
+        return {
+            status: 200,
+            name: user.name,
+            config: config
+        }
     }
 
     async userSignin(name, hash){

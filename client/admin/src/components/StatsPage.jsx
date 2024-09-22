@@ -5,7 +5,7 @@ import close from '../assets/close.svg'
 import ReactLoading from "react-loading";
 import file from '../assets/file.svg'
 import table from '../assets/table.svg'
-import { categories, view, vote } from './vote';
+import { categories, user, view, vote } from './vote';
 import axios from 'axios';
 // import Plotly from 'plotly.js/dist/plotly'
 
@@ -22,12 +22,21 @@ const StatsPage = () => {
     useEffect(() => {
         async function getVotes() {
             try {
-                var response  = await axios.get('http://kologermit.ru:9002/vote/get-result')
+                var response  = await axios.post('http://kologermit.ru:9002/vote/getResult/', {
+                    "name": user.get('name'),
+                    "token": user.get('token'),
+                    "voteId": location.state.id
+                }, {
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
                 if (response.status === 200) {
                     // poll = response.body;
                 }
                 setAppState(response);
             } catch (e) {
+                alert('Ошибка при выполнении запроса, попробуйте ещё раз');
                 // console.log(e)
             }
         }
@@ -105,36 +114,38 @@ const StatsPage = () => {
     //     Plotly.newPlot('myDiv', data, layout);
     // })
     
-    const switchView = (type) => {
-        view.set('view', type);
-        if (type === 'hist') {
-            setAppState(appState + 1);
-        } else {
-            setAppState(appState - 1);
-        }
-    }
+    // const switchView = (type) => {
+    //     view.set('view', type);
+    //     if (type === 'hist') {
+    //         setAppState(appState + 1);
+    //     } else {
+    //         setAppState(appState - 1);
+    //     }
+    // }
 
     const upload = async (type) => {
         if (type === 'excel') {
             try {
-                var response = await axios.get('http://kologermit.ru:9002/vote/get-result-excel')
+                var response = await axios.post('http://kologermit.ru:9002/vote/getResultExcel/')
                 if (response.status === 200) {
                     alert('Выгрузка выполнена успешно');
                 } else {
                     alert('Не удалось выполнить выгрузку, попробуйте ещё раз');
                 }
             } catch (e) {
+                alert('Ошибка при выполнении запроса, попробуйте ещё раз');
                 // console.log(e)
             }
         } else {
             try {
-                var response = await axios.get('http://kologermit.ru:9002/vote/get-result-json')
+                var response = await axios.post('http://kologermit.ru:9002/vote/getResultJson/')
                 if (response.status === 200) {
                     alert('Выгрузка выполнена успешно');
                 } else {
                     alert('Не удалось выполнить выгрузку, попробуйте ещё раз');
                 }
             } catch (e) {
+                alert('Ошибка при выполнении запроса, попробуйте ещё раз');
                 // console.log(e)
             }
         }
@@ -194,17 +205,17 @@ const StatsPage = () => {
                     {/* <div className='authBlock' id='myDiv'>
                     </div> */}
                     <div className='statsBlock'>
-                        <div className='homeButton'>
+                        <div className='homeButton' onClick={() => upload('excel')}>
                             <img src={table}
 			        		alt='excel'
 			        		className='uploadIcon' />
-                            <div className='uploadText' onClick={() => upload('excel')}>Выгрузка в Excel</div>
+                            <div className='uploadText'>Выгрузка в Excel</div>
                         </div>
-                        <div className='homeButton'>
+                        <div className='homeButton' onClick={() => upload('json')}>
                             <img src={file}
 			        		alt='json'
 			        		className='uploadIcon' />
-                            <div className='uploadText' onClick={() => upload('json')}>Выгрузка в JSON</div>
+                            <div className='uploadText'>Выгрузка в JSON</div>
                         </div>
                     </div>
                     {/* {Object.keys(poll.variants).map(item => (

@@ -41,9 +41,9 @@ DB_ROOT_PASSWORD=qwerty
 EXTERNAL_PORT_DB=3306
 
 # Веб сервер
-EXTERNAL_PORT_SSL_API=444
-EXTERNAL_PORT_SSL_ADMIN=445
-EXTERNAL_PORT_SSL_CLIENT=443
+EXTERNAL_PORT_BALANCED_API=82
+EXTERNAL_PORT_ADMIN=81
+EXTERNAL_PORT_CLIENT=80
 
 # API
 EXTERNAL_PORT_API=8000
@@ -85,6 +85,20 @@ npm run build
 ```bash
 docker compose up -d
 ```
+### Результат
+- Приложение запускается около 30с
+- http://localhost/  - клиент пользователя
+- http://localhost:81/ - клиет админа
+- http://localhost:82/ - API через nginx
+- http://localhost:8000/ - API
+- http://localhost:8001/ - документация
+- БД
+    - Хост: localhost
+    - Порт: 3306
+    - Пользователь: admin
+    - Имя базы: sdk
+    - Пароль: qwerty
+
 ## Авторы
 - Павлов Никита
 - Власов Фёдор

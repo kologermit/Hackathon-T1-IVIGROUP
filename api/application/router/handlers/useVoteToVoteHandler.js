@@ -1,8 +1,8 @@
 const useVoteToVoteHandler = (answer, voteManager) => {
     return async (req, res) => {
-        const {name, token, voteId, vote} = req.body;
+        const {name, token, voteId} = req.body;
         if(name && token && voteId) {
-            const result = await voteManager.vote(name, token, voteId, vote);
+            const result = await voteManager.vote(name, token, voteId);
             if (isNaN(parseInt(result))) { 
                 res.json(answer.good(result));
                 return;

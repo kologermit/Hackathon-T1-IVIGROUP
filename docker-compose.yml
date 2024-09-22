@@ -27,9 +27,9 @@ services:
     image: nginx
     restart: always
     ports:
-      - ${EXTERNAL_PORT_SSL_API:-444}:443
-      - ${EXTERNAL_PORT_SSL_ADMIN:-443}:444
-      - ${EXTERNAL_PORT_SSL_CLIENT:-445}:445
+      - ${EXTERNAL_PORT_BALANCED_API:-444}:443
+      - ${EXTERNAL_PORT_ADMIN:-443}:444
+      - ${EXTERNAL_PORT_CLIENT:-445}:445
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
       # - ./nginx/ssl/:/etc/nginx/ssl/:ro

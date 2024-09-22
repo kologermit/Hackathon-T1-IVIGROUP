@@ -1,15 +1,27 @@
+const mysql = require('mysql2');
+
 class DB {
     constructor() {
-        const mysql = require("mysql2");
-        this.connection = mysql.createConnection({
-            host: "db",
-            user: "admin",
-            database: "hackathon",
-            password: "qwerty",
-            port: 3306
-        }); 
+        while (true) {
+        try {
+            this.connection = mysql.createConnection({
+                host: "db",
+                user: "admin",
+                database: "hackathon",
+                password: "qwerty",
+                port: 3306
+            }); 
+            break;
+          } catch (error) {
+                const sleep = (ms) => {
+                    const start = new Date().getTime();
+                    while (new Date().getTime() < start + ms);
+                };
+                
+                sleep(1000);    
+            }
+        }
     }
-
 
     async queryHandler(query, data, isAll) {
         const promise = new Promise((resolve, reject) => {
@@ -28,6 +40,17 @@ class DB {
         return result[0];
     }
 
+    async getVoteConfig(voteId) {
+        let query = "SELECT users.config\
+            FROM votes INNER JOIN users ON votes.admin_id=users.id WHERE votes.id=?"
+        return await this.queryHandler(query, [voteId], false)
+    }
+
+    async setConfig(name, config) {
+        let query = "UPDATE users SET config=? WHERE name=?"
+        return await this.queryHandler(query, [JSON.stringify(config), name], false)
+    }
+
     async checkUserByName(name) {
         let query = "SELECT id, name, hash, admin FROM users WHERE name = ?";
         return await this.queryHandler(query, [name], true);
@@ -35,7 +58,10 @@ class DB {
 
     async getUserByName(name) {
         let query = "SELECT id, name, hash, admin FROM users WHERE name = ?";
-        return await this.queryHandler(query, [name]);
+        user = await this.queryHandler(query, [name]);
+        console.log("user")
+        console.log(user)
+        return user;
     }
 
     async getUserById(name) {

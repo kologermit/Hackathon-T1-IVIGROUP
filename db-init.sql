@@ -3,7 +3,8 @@ CREATE TABLE IF NOT EXISTS `users` (
     PRIMARY KEY(`id`),
     `name` VARCHAR(300) NOT NULL DEFAULT 'default',
     `hash` VARCHAR(300) NOT NULL DEFAULT '',
-    `admin` BOOLEAN NOT NULL DEFAULT false
+    `admin` BOOLEAN NOT NULL DEFAULT false,
+    `config` VARCHAR(1000) NOT NULL DEFAULT '{"main_color":"#FFFFFF","question_color":"#FFFFFF","font_color":"#FFFFFF"}'
 );
 
 CREATE TABLE IF NOT EXISTS `votes` (

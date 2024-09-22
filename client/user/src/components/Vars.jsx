@@ -15,7 +15,10 @@ var questionDesk = [{
     'q2': '2. Если в продукте НЕТ *название функции 2*',
     'q3': '3. Насколько понятна суть этой функции?'
 }]
-var description = ["Описание функции", "Описание функции"]
-var fName = "*название функции*"
-var questionNames = [`1. Если в продукте ЕСТЬ ${fName}`, `2. Если в продукте НЕТ ${fName}`, '3. Насколько понятна суть этой функции?']
-module.exports = { selected, questions, questionNames, votes, name, description, questionDesk };
+// var description = ["Описание функции", "Описание функции"]
+// var fName = "*название функции*"
+// var questionNames = [`1. Если в продукте ЕСТЬ ${fName}`, `2. Если в продукте НЕТ ${fName}`, '3. Насколько понятна суть этой функции?']
+var view = new Map()
+var user = new Map()
+var colors = new Map()
+module.exports = { selected, questions, votes, name, questionDesk, colors, view, user };

@@ -1,4 +1,5 @@
 const { query } = require('express');
+const { config } = require('process');
 
 class VoteManager {
     constructor(db, authHandler){
@@ -6,6 +7,8 @@ class VoteManager {
         this.authHandler = authHandler
         this.crypto = require('crypto');
         this.uuid = require('uuid');
+        this.fs = require('fs'); // Модуль для работы с файлами
+        this.path = require('path');
     }
 
     async createVote(name, token, votes){
@@ -53,28 +56,39 @@ class VoteManager {
         return 400;
     }
 
+    async getVoteConfig(name, token, voteId)  {
+        const user = await this.db.getUserByName(name)      
+        const auth = await this.authHandler.authRequest(user.id, token);
+        if(auth.status != 200) {
+            return 400
+        }
+        return {
+            status: 200,
+            config: JSON.parse((await this.db.getVoteConfig(voteId)).config)
+        }
+    }
+
     async getVoteResult(name, token, voteId){
         const user = await this.db.getUserByName(name)
         if (user) {
             const auth = await this.authHandler.authRequest(user.id, token);
-            let userRes = []
+            const userRes = []
             if(auth.status === 200) { 
                 if(user.admin === 1) {
                     const users = await this.db.findUsersByQuestions(voteId, user.id);
                     console.log(users)
-                    users.forEach(async (obj) => {
-                        let resp = await this.db.getResponceByUserAndVoteId(voteId, obj.id)
+                    await Promise.all(users.map(async (obj) => {
+                        let resp = await this.db.getResponceByUserAndVoteId(voteId, obj.id);
                         userRes.push({
                             userId: user.id,
                             name: user.name,
                             responce: resp
-                        })
-                    })
-                    const votes = await this.db.getResponceByUserAndVoteId(voteId, user.id);
-                    console.log(votes)
+                        });
+                    }));
+
                     return {
                         status: 200,
-                        usersResp: userRes
+                        usersResp: userRes 
                     }
                 }
                 return 403;
@@ -126,14 +140,53 @@ class VoteManager {
     }
 
     async getVoteResultExcel(name, hash){
-        
-        return 0;
+        const user = await this.db.getUserByName(name)
+        if (user) {
+            const auth = await this.authHandler.authRequest(user.id, token);
+            if(auth.status === 200) { 
+                if(user.admin === 1) {
+                    const adminVotes = await this.db.getAdminVotes(user.id);
+                    return {
+                        status: 200,
+                        votes: adminVotes
+                    }
+                }
+                return 403;
+            }
+            return 402;
+        }         
+        return 400;
     }
 
-    async getVoteResultJson(name, hash){
-        
-        return 0;
+    async getVoteResultJson(name, token, voteId, res){
+        const user = await this.db.getUserByName(name)
+        if (user) {
+            const auth = await this.authHandler.authRequest(user.id, token);
+            const userRes = []
+            if(auth.status === 200) { 
+                if(user.admin === 1) {
+                    const users = await this.db.findUsersByQuestions(voteId, user.id);
+                    console.log(users)
+                    await Promise.all(users.map(async (obj) => {
+                        let resp = await this.db.getResponceByUserAndVoteId(voteId, obj.id);
+                        userRes.push({
+                            userId: user.id,
+                            name: user.name,
+                            responce: resp
+                        });
+                    })); 
+                    const jsonData = JSON.stringify(userRes); // Преобразуем объект в JSON-строку
+
+                    return this.path.join(__dirname, 'data.json'); // Путь к файлу
+                }
+                return 403;
+            }
+            return 402;
+        }         
+        return 400;
     }
+
+
 }
 
 module.exports = VoteManager;

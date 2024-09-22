@@ -6,6 +6,7 @@ const useAdminSigninHandler = require('./handlers/useAdminSigninHandler');
 const useAdminLoginHandler = require('./handlers/useAdminLoginHandler');
 const useAdminLogoutHandler = require('./handlers/useAdminLogoutHandler');
 const useAdminMeHandler = require('./handlers/useAdminMeHandler');
+const useAdminSetConfig = require('./handlers/useAdminSetConfig');
 
 const useUserSigninHandler= require('./handlers/useUserSigninHandler');
 const useUserLoginHandler= require('./handlers/useUserLoginHandler');
@@ -19,6 +20,7 @@ const useVoteGetResultExcelHandler= require('./handlers/useVoteGetResultExcelHan
 const useVoteGetResultJsonHandler = require('./handlers/useVoteGetResultJsonHandler');
 const useVoteGetHandler = require('./handlers/useVoteGetHandler');
 const useVoteGetAdminVotesHandler = require('./handlers/useVoteGetAdminVotesHandler');
+const useVoteGetConfigHandler = require('./handlers/useVoteGetConfigHandler');
 
 
 const urlencodedParser = express.urlencoded({extended: false});
@@ -31,12 +33,12 @@ function Router(userManager, voteManager) {
     router.post('/admin/login/', urlencodedParser, useAdminLoginHandler(answer, userManager));
     router.post('/admin/logout/', urlencodedParser, useAdminLogoutHandler(answer, userManager));
     router.post('/admin/me/', urlencodedParser, useAdminMeHandler(answer, userManager));
+    router.post('/admin/setConfig/', urlencodedParser, useAdminSetConfig(answer, userManager))
     // Юзер
     router.post('/user/signin/', urlencodedParser, useUserSigninHandler(answer, userManager)); 
     router.post('/user/login/', urlencodedParser, useUserLoginHandler(answer, userManager));
     router.post('/user/logout/', urlencodedParser, useUserLogoutHandler(answer, userManager));
     router.post('/user/me/', urlencodedParser, useUserMeHandler(answer, userManager));
-
     // Голосование
     router.post('/vote/create/', urlencodedParser, useVoteCreateHandler(answer, voteManager));
     router.post('/vote/get/', urlencodedParser, useVoteGetHandler(answer, voteManager));
@@ -45,9 +47,11 @@ function Router(userManager, voteManager) {
     router.post('/vote/getResultExcel/', urlencodedParser, useVoteGetResultExcelHandler(answer, voteManager));
     router.post('/vote/getResultJson/', urlencodedParser, useVoteGetResultJsonHandler(answer, voteManager));
     router.post('/vote/adminVotes/', urlencodedParser, useVoteGetAdminVotesHandler(answer, voteManager));
+    router.post('/vote/getConfig/', urlencodedParser, useVoteGetConfigHandler(answer, voteManager));
+    
 
     router.all('/*', (req, res) => {
-        res.send('ААА');
+        res.send('Ты попал не туда!'); 
     });
 
     return router;

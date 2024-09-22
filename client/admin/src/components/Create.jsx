@@ -4,7 +4,7 @@ import close from '../assets/close.svg'
 import trash from '../assets/trash.svg'
 import check from '../assets/check.svg'
 import { useNavigate } from 'react-router-dom';
-import { questions, view } from './vote';
+import { questions, user, view } from './vote';
 import axios from 'axios';
 import { HexColorPicker } from "react-colorful";
 
@@ -12,18 +12,16 @@ const Create = () => {
     const [appState, setAppState] = useState(0);
     let navigate = useNavigate();
 
-    view.set('selectColor', false);
-
     if (typeof view.get('mainColor') === 'undefined') {
-        view.set('mainColor', null);
+        view.set('mainColor', "null");
     }
 
     if (typeof view.get('secondColor') === 'undefined') {
-        view.set('secondColor', null);
+        view.set('secondColor', "null");
     }
 
     if (typeof view.get('textColor') === 'undefined') {
-        view.set('textColor', null);
+        view.set('textColor', "null");
     }
 
     const [mainColor, setMainColor] = useState("#d9e4e6");
@@ -89,11 +87,11 @@ const Create = () => {
             if (!blank) {
                 var sum = {
                     "description": name,
-                    "questions_desk": []
+                    "questions_desc": []
                 };
 
                 for (let i = 0; i < questions.length; i++) {
-                    sum.questions_desk.push({
+                    sum.questions_desc.push({
                         "description": document.getElementById(`funcDesc${i}`).value,
                         "q1": "Если в продукте ЕСТЬ: *" + document.getElementById(`funcName${i}`).value + "*",
                         "q2": "Если в продукте НЕТ: *" + document.getElementById(`funcName${i}`).value + "*",
@@ -101,13 +99,38 @@ const Create = () => {
                     })
                 }
 
+                if (view.get('mainColor') !== "null" || view.get('secondColor') !== "null" || view.get('textColor') !== "null") {
+                    try {
+                        var json = {
+                            "name": user.get('name'),
+                            "token": user.get('token'),
+                            "config": {
+                                "main_color": view.get('mainColor'),
+                                "question_color": view.get('secondColor'),
+                                "font_color": view.get('textColor')
+                            }
+                        }
+                        var response = await axios.post('http://kologermit.ru:9002/admin/setConfig/', json, {
+                            headers: {
+                                'Content-Type': 'application/json'
+                            }
+                        })
+                        if (response.status === 200) {
+                            setAppState(appState + 1);
+                        }
+                    } catch (e) {
+                        alert('Ошибка при выполнении запроса, попробуйте ещё раз');
+                        // console.log(e);
+                    }
+                }
+
                 try {
                     var json = {
-                        "name": "asdsdsdfsd",
-                        "token": "786fa3ca-40b1-4fff-a722-7a30fadecfb4",
-                        sum
+                        "name": user.get('name'),
+                        "token": user.get('token'),
+                        "votes": sum
                     }
-                    var response = await axios.post('http://kologermit.ru:9002/vote/create-vote', json, {
+                    var response = await axios.post('http://kologermit.ru:9002/vote/create/', json, {
                         headers: {
                             'Content-Type': 'application/json'
                         }
@@ -120,6 +143,7 @@ const Create = () => {
                         alert('Не удалось создать голосование, попробуйте ещё раз');
                     }
                 } catch (e) {
+                    alert('Ошибка при выполнении запроса, попробуйте ещё раз');
                     // console.log(e);
                 }
             } else {
