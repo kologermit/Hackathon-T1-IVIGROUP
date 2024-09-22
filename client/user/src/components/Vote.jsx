@@ -5,6 +5,7 @@ import axios from 'axios';
 import { colors, name, questionDesk, questions, selected, user } from './Vars';
 import ReactLoading from "react-loading";
 import { useLocation, useNavigate } from 'react-router-dom';
+import { apiLink } from '../config/Config';
 
 
 const Vote = () => {
@@ -53,7 +54,7 @@ const Vote = () => {
         
         if (notNull) {
             try {
-                var response = await axios.post('http://kologermit.ru:9002/vote/toVote/', {
+                var response = await axios.post(`${apiLink}/vote/toVote/`, {
                     "name": user.get("name"),
                     "token": user.get("token"),
                     "voteId": location.state.id,

@@ -89,6 +89,9 @@ class DB {
     async addVote(desc, admin_id) {
         let query = "INSERT INTO votes (description, admin_id) VALUES (?,?)";
         const result = await this.queryHandler(query, [desc, admin_id], true);
+        if (result === undefined) {
+            return -1;
+        }
         return result.insertId
     }
 
@@ -99,6 +102,11 @@ class DB {
 
     async getVoteById(id) {
         let query = "SELECT description, admin_id FROM votes WHERE id=?";
+        if (vote === undefined) {
+            return {
+                description: ""
+            }
+        }
         return await this.queryHandler(query, [id]);
     }
 

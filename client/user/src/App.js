@@ -9,7 +9,7 @@ function App() {
     <div className="VoteApp">
       <Routes>
         <Route index element={<Button />} />
-        <Route path={'Auth/:id'} element={<Auth />} />
+        <Route path={'Auth'} element={<Auth />} />
         <Route path={'Vote/:id'} element={<Vote />} />
       </Routes>
     </div>

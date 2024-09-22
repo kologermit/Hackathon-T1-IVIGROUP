@@ -4,6 +4,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import ReactLoading from "react-loading";
 import { colors, name, questionDesk, user, view } from './Vars';
 import axios from 'axios';
+import { apiLink, id } from '../config/Config';
 
 const Auth = () => {
     const [appState, setAppState] = useState(0);
@@ -21,7 +22,7 @@ const Auth = () => {
 
     async function getVariants() {
         try {
-            var response  = await axios.post('http://kologermit.ru:9002/vote/get/', {
+            var response  = await axios.post(`${apiLink}/vote/get/`, {
                 "name": user.get("name"),
                 "token": user.get("token"),
                 "voteId": 14
@@ -43,7 +44,7 @@ const Auth = () => {
 
     async function getColors() {
         try {
-            var response  = await axios.post('http://kologermit.ru:9002/vote/getConfig/', {
+            var response  = await axios.post(`${apiLink}/vote/getConfig/`, {
                 "name": user.get("name"),
                 "token": user.get("token"),
                 "voteId": 14
@@ -79,7 +80,7 @@ const Auth = () => {
             if (password !== '') {
                 try {
                     if (mode === 'auth') {
-                        var response = await axios.post(`http://kologermit.ru:9002/user/login/`, {
+                        var response = await axios.post(`${apiLink}/user/login/`, {
                             "name": login,
                             "hash": password
                         }, {
@@ -93,12 +94,12 @@ const Auth = () => {
                             user.set('name', response.data.data.name);
                             await getVariants();
                             await getColors();
-                            navigate(`../Vote/${location.state.id}`, { replace: true, state: {id: location.state.id} });
+                            navigate(`../Vote/${id}`, { replace: true, state: {id: id} });
                         } else {
                             alert('Ошибка авторизации, попробуйте ещё раз');
                         }
                     } else {
-                        var response = await axios.post(`http://kologermit.ru:9002/user/signin/`, {
+                        var response = await axios.post(`${apiLink}/user/signin/`, {
                             "name": login,
                             "hash": password
                         }, {
@@ -112,7 +113,7 @@ const Auth = () => {
                             user.set('name', response.data.data.name);
                             await getVariants();
                             await getColors();
-                            navigate(`../Vote/${location.state.id}`, { replace: true, state: {id: location.state.id} });
+                            navigate(`../Vote/${id}`, { replace: true, state: {id: id} });
                         } else {
                             alert('Ошибка регистрации, попробуйте ещё раз');
                         }

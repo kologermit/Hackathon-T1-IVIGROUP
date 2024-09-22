@@ -5,8 +5,9 @@ import close from '../assets/close.svg'
 import ReactLoading from "react-loading";
 import file from '../assets/file.svg'
 import table from '../assets/table.svg'
-import { categories, user, view, vote } from './vote';
+import { categories, poll, user, view, vote } from './vote';
 import axios from 'axios';
+import { apiLink } from '../config/Config';
 // import Plotly from 'plotly.js/dist/plotly'
 
 const StatsPage = () => {
@@ -16,46 +17,14 @@ const StatsPage = () => {
 
     const location = useLocation();
 
-    var poll = [];
-    var srch = false;
+    // var srch = false;
 
-    useEffect(() => {
-        async function getVotes() {
-            try {
-                var response  = await axios.post('http://kologermit.ru:9002/vote/getResult/', {
-                    "name": user.get('name'),
-                    "token": user.get('token'),
-                    "voteId": location.state.id
-                }, {
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                })
-                if (response.status === 200) {
-                    // poll = response.body;
-                }
-                setAppState(response);
-            } catch (e) {
-                alert('Ошибка при выполнении запроса, попробуйте ещё раз');
-                // console.log(e)
-            }
-        }
-
-        async function makeRequest() {
-            setIsLoading(true);
-            await getVotes();
-            setIsLoading(false);
-        }
-    
-        makeRequest();
-    }, [setAppState])
-
-    for (let i = 0; i < vote.length && !srch; i++) {
-        if (location.state.id === vote[i].id) {
-            poll = vote[i];
-            srch = true;
-        }
-    }
+    // for (let i = 0; i < vote.length && !srch; i++) {
+    //     if (location.state.id === vote[i].id) {
+    //         poll = vote[i];
+    //         srch = true;
+    //     }
+    // }
 
     if (typeof view.get('view') === 'undefined') {
         view.set('view', 'table');
@@ -67,6 +36,18 @@ const StatsPage = () => {
     //     2: [],
     //     3: [],
     //     4: []
+    // }
+
+    // for (let i = 0; poll.length; i++) {
+    //     for (let j = 0; poll[i].responce.length; j++) {
+    //         if (poll[i].responce[j].q1 === 1) {
+    //             if (poll[i].responce[j].q2 === 1) {
+
+    //             }
+    //         } else {
+    //             // 
+    //         }
+    //     }
     // }
 
     for (const variant in poll.variants) {
@@ -126,7 +107,15 @@ const StatsPage = () => {
     const upload = async (type) => {
         if (type === 'excel') {
             try {
-                var response = await axios.post('http://kologermit.ru:9002/vote/getResultExcel/')
+                var response = await axios.post(`${apiLink}/vote/getResultExcel/`, {
+                    "name": user.get('name'),
+                    "token": user.get('token'),
+                    "voteId": location.state.id
+                }, {
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
                 if (response.status === 200) {
                     alert('Выгрузка выполнена успешно');
                 } else {
@@ -138,7 +127,15 @@ const StatsPage = () => {
             }
         } else {
             try {
-                var response = await axios.post('http://kologermit.ru:9002/vote/getResultJson/')
+                var response = await axios.post(`${apiLink}/vote/getResultJson/`, {
+                    "name": user.get('name'),
+                    "token": user.get('token'),
+                    "voteId": location.state.id
+                }, {
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
                 if (response.status === 200) {
                     alert('Выгрузка выполнена успешно');
                 } else {
@@ -166,58 +163,64 @@ const StatsPage = () => {
                         <div className='header'>id{location.state.id}</div>
                         <span className='another' />
                     </div>
-                    <div className='variants'>{poll.name}</div>
-                    {/* <div className='textLine'>
-                        <div className={view.get('view') === 'table' ? 'switchButtonActive' : 'switchButton'} onClick={() => switchView('table')}>Таблица</div>
-                        <div className={view.get('view') === 'hist' ? 'switchButtonActive' : 'switchButton'} onClick={() => switchView('hist')}>Гистограмма</div>
-                    </div> */}
-                    <div className='authBlock'>
-                        <div className='tableBlock'>
-                        <table>
-                            <tr>
-                                <th colSpan={7}>Количественная оценка</th>
-                            </tr>
-                            <tr>
-                                <th></th>
-                                <th>Обязательные</th>
-                                <th>Важные</th>
-                                <th>Интересные</th>
-                                <th>Безразличные</th>
-                                <th>Сомнительные</th>
-                                <th>Категория</th>
-                            </tr>
-                            {
-                                Object.keys(poll.variants).map(item => (
+                    {poll.length > 0 ? (
+                        <div>
+                            <div className='variants'>{poll.name}</div>
+                            {/* <div className='textLine'>
+                                <div className={view.get('view') === 'table' ? 'switchButtonActive' : 'switchButton'} onClick={() => switchView('table')}>Таблица</div>
+                                <div className={view.get('view') === 'hist' ? 'switchButtonActive' : 'switchButton'} onClick={() => switchView('hist')}>Гистограмма</div>
+                            </div> */}
+                            <div className='authBlock'>
+                                <div className='tableBlock'>
+                                <table>
                                     <tr>
-                                        <th>{item}</th>
-                                        <td className={poll.biggestIndex[item] === 0 ? 'greenCell' : ''}>{poll.percentage[item][0]}%</td>
-                                        <td className={poll.biggestIndex[item] === 1 ? 'greenCell' : ''}>{poll.percentage[item][1]}%</td>
-                                        <td className={poll.biggestIndex[item] === 2 ? 'greenCell' : ''}>{poll.percentage[item][2]}%</td>
-                                        <td className={poll.biggestIndex[item] === 3 ? 'greenCell' : ''}>{poll.percentage[item][3]}%</td>
-                                        <td className={poll.biggestIndex[item] === 4 ? 'greenCell' : ''}>{poll.percentage[item][4]}%</td>
-                                        <th>{categories[poll.biggestIndex[item]]}</th>
+                                        <th colSpan={7}>Количественная оценка</th>
                                     </tr>
-                                ))
-                            }
-                        </table>
+                                    <tr>
+                                        <th></th>
+                                        <th>Обязательные</th>
+                                        <th>Важные</th>
+                                        <th>Интересные</th>
+                                        <th>Безразличные</th>
+                                        <th>Сомнительные</th>
+                                        <th>Категория</th>
+                                    </tr>
+                                    {
+                                        Object.keys(poll.variants).map(item => (
+                                            <tr>
+                                                <th>{item}</th>
+                                                <td className={poll.biggestIndex[item] === 0 ? 'greenCell' : ''}>{poll.percentage[item][0]}%</td>
+                                                <td className={poll.biggestIndex[item] === 1 ? 'greenCell' : ''}>{poll.percentage[item][1]}%</td>
+                                                <td className={poll.biggestIndex[item] === 2 ? 'greenCell' : ''}>{poll.percentage[item][2]}%</td>
+                                                <td className={poll.biggestIndex[item] === 3 ? 'greenCell' : ''}>{poll.percentage[item][3]}%</td>
+                                                <td className={poll.biggestIndex[item] === 4 ? 'greenCell' : ''}>{poll.percentage[item][4]}%</td>
+                                                <th>{categories[poll.biggestIndex[item]]}</th>
+                                            </tr>
+                                        ))
+                                    }
+                                </table>
+                                </div>
+                            </div>
+                            {/* <div className='authBlock' id='myDiv'>
+                            </div> */}
+                            <div className='statsBlock'>
+                                <div className='homeButton' onClick={() => upload('excel')}>
+                                    <img src={table}
+			                		alt='excel'
+			                		className='uploadIcon' />
+                                    <div className='uploadText'>Выгрузка в Excel</div>
+                                </div>
+                                <div className='homeButton' onClick={() => upload('json')}>
+                                    <img src={file}
+			                		alt='json'
+			                		className='uploadIcon' />
+                                    <div className='uploadText'>Выгрузка в JSON</div>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                    {/* <div className='authBlock' id='myDiv'>
-                    </div> */}
-                    <div className='statsBlock'>
-                        <div className='homeButton' onClick={() => upload('excel')}>
-                            <img src={table}
-			        		alt='excel'
-			        		className='uploadIcon' />
-                            <div className='uploadText'>Выгрузка в Excel</div>
-                        </div>
-                        <div className='homeButton' onClick={() => upload('json')}>
-                            <img src={file}
-			        		alt='json'
-			        		className='uploadIcon' />
-                            <div className='uploadText'>Выгрузка в JSON</div>
-                        </div>
-                    </div>
+                    ) : (
+                        <div className='header'>В опросе ещё никто не участвовал</div>
+                    )}                    
                     {/* {Object.keys(poll.variants).map(item => (
                         <div className='stats'>
                             <div className='variantCard'>

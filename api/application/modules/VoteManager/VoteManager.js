@@ -105,6 +105,9 @@ class VoteManager {
             if(auth.status === 200) { 
                 if(user.admin === 0) {
                     const question_ids = await this.db.getQuestionsIdByVoteId(voteId)
+                    if (vote === undefined) {
+                        return 400
+                    }
                     vote.forEach(async(obj, index) => {
                         let qid = question_ids[index].id
                         await this.db.insertUserResponceOnQuestions(voteId, qid, obj.q1, obj.q2, obj.q3, user.id)

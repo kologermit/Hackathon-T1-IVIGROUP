@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import { questions, user, view } from './vote';
 import axios from 'axios';
 import { HexColorPicker } from "react-colorful";
+import { apiLink } from '../config/Config';
 
 const Create = () => {
     const [appState, setAppState] = useState(0);
@@ -110,7 +111,7 @@ const Create = () => {
                                 "font_color": view.get('textColor')
                             }
                         }
-                        var response = await axios.post('http://kologermit.ru:9002/admin/setConfig/', json, {
+                        var response = await axios.post(`${apiLink}/admin/setConfig/`, json, {
                             headers: {
                                 'Content-Type': 'application/json'
                             }
@@ -130,7 +131,7 @@ const Create = () => {
                         "token": user.get('token'),
                         "votes": sum
                     }
-                    var response = await axios.post('http://kologermit.ru:9002/vote/create/', json, {
+                    var response = await axios.post(`${apiLink}/vote/create/`, json, {
                         headers: {
                             'Content-Type': 'application/json'
                         }

@@ -6,10 +6,8 @@ import { useNavigate } from 'react-router-dom';
 const Button = () => {
     let navigate = useNavigate();
 
-    var id = 14;
-
     return (
-        <div className='buttonBlock' onClick={() => navigate(`Auth/${id}`, { replace: false, state: { id: id } })}>
+        <div className='buttonBlock' onClick={() => navigate('Auth', { replace: false })}>
             <div className='mainButton'>
                 <img src={graph}
 				alt='graph'

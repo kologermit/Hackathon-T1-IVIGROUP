@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import ReactLoading from "react-loading";
 import { user, view } from './vote';
 import axios from 'axios';
+import { apiLink } from '../config/Config';
 
 const Auth = () => {
     const [appState, setAppState] = useState(0);
@@ -25,7 +26,7 @@ const Auth = () => {
             if (password !== '') {
                 try {
                     if (mode === 'auth') {
-                        var response = await axios.post(`http://kologermit.ru:9002/admin/login/`, {
+                        var response = await axios.post(`${apiLink}/admin/login/`, {
                             "name": login,
                             "hash": password
                         }, {
@@ -41,7 +42,7 @@ const Auth = () => {
                             alert('Ошибка авторизации, попробуйте ещё раз');
                         }
                     } else {
-                        var response = await axios.post(`http://kologermit.ru:9002/admin/signin/`, {
+                        var response = await axios.post(`${apiLink}/admin/signin/`, {
                             "name": login,
                             "hash": password
                         }, {

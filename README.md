@@ -52,7 +52,8 @@ EXTERNAL_PORT_API=8000
 EXTERNAL_PORT_DOC=8001
 HOST=localhost
 ```
-
+### Кастомные настройки
+- Если был изменён хост или порт в файле .env, то необходимо поменять в файлах client/admin/src/config/Config.jsx и client/user/src/config/Config.jsx на нужный адрес АПИ
 ### Сборка клиена админа
 - В терминале перейдите в папку client/admin
 ```bash
