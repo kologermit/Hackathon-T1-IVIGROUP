@@ -1,0 +1,82 @@
+networks:
+  general:
+
+volumes:
+  db:
+  api_log:
+  api_db:
+
+services:
+  db:
+    image: mysql:9
+    cap_add:
+      - SYS_NICE
+    restart: always
+    environment:
+      - MYSQL_USER=${DB_USER:-admin}
+      - MYSQL_PASSWORD=${DB_PASSWORD:-qwerty}
+      - MYSQL_DATABASE=${DB_NAME:-hackathon}
+      - MYSQL_ROOT_PASSWORD=${DB_ROOT_PASSWORD:-qwerty}
+    volumes:
+      - db:/var/lib/mysql
+      - ./db-init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - 9306:3306
+    networks:
+      - general
+    mem_limit: "600M"
+  web-server:
+    image: nginx
+    restart: always
+    ports:
+      - ${EXTERNAL_PORT_SSL_API:-9000}:443
+      - ${EXTERNAL_PORT_SSL_ADMIN:-9001}:444
+      - ${EXTERNAL_PORT_SSL_CLIENT:-9004}:445
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/ssl/:/etc/nginx/ssl/:ro
+      - ./client/admin/build/:/etc/nginx/admin/:ro
+      - ./client/user/build/:/etc/nginx/user/:ro
+    networks:
+      - general
+    environment:
+      - EXTERNAL_PORT_WEB_SERVER_SSL=${EXTERNAL_PORT_WEB_SERVER_SSL:-9000}
+      - API_HOST=${API_HOST:-kologermit.ru}
+  api:
+    build: ./api
+    restart: always
+    ports:
+      - ${EXTERNAL_PORT_API:-9002}:3000
+    volumes:
+      - ./api:/app
+      - api_log:/log
+      - api_db:/db
+    networks:
+      - general
+    environment:
+      - DB_USER=${DB_USER:-admin}
+      - DB_PASSWORD=${DB_PASSWORD:-qwerty}
+      - DB_DB=${DB_NAME:-hackathon}
+      - DOC_HOST=${API_HOST:-https://kologermit.ru}:${EXTERNAL_PORT_DOC:-9003}
+      - API_ID=1
+  auth:
+    build: ./auth
+    restart: always
+    volumes:
+      - ./auth:/app:ro
+    networks:
+      - general
+    environment:
+      - DB_USER=${DB_USER:-admin}
+      - DB_PASSWORD=${DB_PASSWORD:-qwerty}
+      - DB_DB=${DB_NAME:-hackathon}
+    ports:
+      - 9005:8080
+  doc:
+    build: 
+      context: ./doc
+      args:
+        - API_HOST=kologermit.ru:9000
+    ports:
+      - ${EXTERNAL_PORT_DOC:-9003}:8080
+    

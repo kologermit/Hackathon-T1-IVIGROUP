@@ -1,0 +1,256 @@
+openapi: 3.0.0
+info:
+  title: Voting API
+  description: API для голосования и управления администраторами
+  version: 1.0.0
+servers:
+  - url: https://${API_HOST}
+    description: Production server
+
+paths:
+  /admin/signin/:
+    post:
+      summary: Регистрация администратора
+      tags:
+        - Admin
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  example: admin123
+                password:
+                  type: string
+                  example: yourpassword
+      responses:
+        '201':
+          description: Успешная регистрация администратора
+        '400':
+          description: Ошибка валидации данных
+
+  /admin/log-in-admin:
+    post:
+      summary: Вход администратора
+      tags:
+        - Admin
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  example: admin123
+                password:
+                  type: string
+                  example: yourpassword
+      responses:
+        '200':
+          description: Успешный вход администратора
+        '401':
+          description: Неверные данные
+
+  /admin/log-out-admin:
+    post:
+      summary: Выход администратора
+      tags:
+        - Admin
+      responses:
+        '200':
+          description: Успешный выход администратора
+
+  /admin:
+    get:
+      summary: Получение информации об админе
+      tags:
+        - Admin
+      responses:
+        '200':
+          description: Данные администратора
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    example: 1
+                  username:
+                    type: string
+                    example: admin123
+
+  /user/sign-in:
+    post:
+      summary: Регистрация голосующего
+      tags:
+        - User
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  example: voter123
+                password:
+                  type: string
+                  example: votepassword
+      responses:
+        '201':
+          description: Успешная регистрация голосующего
+
+  /user/log-in:
+    post:
+      summary: Вход голосующего
+      tags:
+        - User
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  example: voter123
+                password:
+                  type: string
+                  example: votepassword
+      responses:
+        '200':
+          description: Успешный вход голосующего
+        '401':
+          description: Неверные данные
+
+  /user/log-out:
+    post:
+      summary: Выход голосующего
+      tags:
+        - User
+      responses:
+        '200':
+          description: Успешный выход
+
+  /user/me:
+    get:
+      summary: Получение данных о себе
+      tags:
+        - User
+      responses:
+        '200':
+          description: Информация о пользователе
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    example: 1
+                  username:
+                    type: string
+                    example: voter123
+
+  /vote/create-vote:
+    post:
+      summary: Создание опроса
+      tags:
+        - Vote
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  example: Best programming language?
+                options:
+                  type: array
+                  items:
+                    type: string
+                  example: ['Python', 'Java', 'C++']
+      responses:
+        '201':
+          description: Опрос успешно создан
+
+  /vote/get-result:
+    get:
+      summary: Получение результата опроса
+      tags:
+        - Vote
+      responses:
+        '200':
+          description: Результаты опроса
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  vote_id:
+                    type: integer
+                    example: 1
+                  results:
+                    type: object
+                    additionalProperties:
+                      type: integer
+                    example: {'Python': 10, 'Java': 5, 'C++': 2}
+
+  /vote/vote:
+    post:
+      summary: Добавление голоса в опрос
+      tags:
+        - Vote
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                vote_id:
+                  type: integer
+                  example: 1
+                option:
+                  type: string
+                  example: Python
+      responses:
+        '200':
+          description: Голос успешно добавлен
+
+  /vote/get-result-excel:
+    get:
+      summary: Выгрузка результата в формате Excel
+      tags:
+        - Vote
+      responses:
+        '200':
+          description: Excel файл с результатами
+          content:
+            application/vnd.openxmlformats-officedocument.spreadsheetml.sheet:
+              schema:
+                type: string
+                format: binary
+
+  /vote/get-result-json:
+    get:
+      summary: Выгрузка результата в формате JSON
+      tags:
+        - Vote
+      responses:
+        '200':
+          description: Результаты опроса в формате JSON
+          content:
+            application/json:
+              schema:
+                type: object

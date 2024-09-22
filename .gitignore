@@ -1,0 +1,7 @@
+*nginx/ssl
+*__pycache__
+*.vscode
+*node_modules
+*.idea
+*.sqlite3
+venv

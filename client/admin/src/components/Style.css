@@ -1,0 +1,303 @@
+.homeBlock {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 80vh;
+}
+
+.homeButton {
+    text-align: center;
+    padding: 15px 25px;
+    margin-left: 15px;
+    margin-right: 15px;
+    border-radius: 15px;
+    background: linear-gradient(to bottom right, rgba(244,253,255,1) 0%, rgba(183,249,255,1) 100%) 100% no-repeat;
+    cursor: pointer;
+    box-shadow: 0px 0px 15px 2px gray;
+}
+
+.homeIcon {
+    transform: scale(1.7);
+    margin: 45px 0;
+}
+
+.homeButtonText {
+    font-size: 1.1em;
+}
+
+.textField {
+    text-align: start;
+    margin: 5px 0;
+    padding: 5px;
+    padding-left: 10px;
+    width: 50%;
+    height: 25px;
+    font-size: 1em;
+    border-radius: 15px;
+    border-width: 1px;
+    border-color: lightgray;
+    border-style: solid;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+}
+
+.textFieldInside {
+    text-align: start;
+    margin: 5px 0;
+    padding: 5px;
+    padding-left: 10px;
+    width: 80%;
+    height: 25px;
+    font-size: 1em;
+    border-radius: 15px;
+    border-width: 1px;
+    border-color: lightgray;
+    border-style: solid;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+}
+
+.textField:focus {
+    outline: none !important;
+    border-color: gray;
+}
+
+.textFieldAnswer {
+    text-align: start;
+    margin: 5px 0;
+    padding: 5px;
+    padding-left: 10px;
+    width: 76%;
+    height: 25px;
+    font-size: 1em;
+    border-radius: 15px;
+    border-width: 1px;
+    border-color: lightgray;
+    border-style: solid;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+}
+
+.textFieldAnswer:focus {
+    outline: none !important;
+    border-color: gray;
+}
+
+.header {
+    text-align: center;
+    font-size: 1.5em;
+    font-weight: 700;
+    margin: 30px 0 20px;
+}
+
+.variants {
+    text-align: center;
+    font-size: 1.3em;
+    font-weight: 700;
+    margin: 10px 0;
+}
+
+.variantsOne {
+    text-align: center;
+    font-size: 1.1em;
+    font-weight: 700;
+    margin: 10px 0;
+}
+
+.inputLine {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.textLine {
+    display: flex;
+    justify-content: center;
+    align-items: baseline;
+    margin: 0px 10vw;
+}
+
+.addButton {
+    margin: 5px 0;
+    padding: 10px 10px;
+    width: 50%;
+    text-align: center;
+    background: linear-gradient(to bottom right, rgba(244,253,255,1) 0%, rgba(183,249,255,1) 100%) 100% no-repeat;
+    border-radius: 20px;
+    border-style: solid;
+    border-width: 0.1px;
+    border-color: lightgray;
+    cursor: pointer;
+}
+
+.addButtonInside {
+    margin: 5px 0;
+    padding: 10px 10px;
+    width: 80%;
+    text-align: center;
+    background: linear-gradient(to bottom right, rgba(244,253,255,1) 0%, rgba(183,249,255,1) 100%) 100% no-repeat;
+    border-radius: 20px;
+    border-style: solid;
+    border-width: 0.1px;
+    border-color: lightgray;
+    cursor: pointer;
+}
+
+.deleteButton {
+    cursor: pointer;
+    padding-left: 15px;
+    transform: scale(1.3);
+}
+
+.manageButton {
+    transform: scale(1.7);
+    margin: auto;
+    padding-top: 10px;
+    cursor: pointer;
+}
+
+.voteCard {
+    background: linear-gradient(to bottom right, rgba(244,253,255,1) 0%, rgba(183,249,255,1) 100%) 100% no-repeat;
+    border-style: solid;
+    border-width: 0.1px;
+    border-color: lightgray;
+    border-radius: 15px;
+    padding: 5px 0;
+    color: black;
+    margin: 15px 15px 0 15px;
+    cursor: pointer;
+    text-align: start;
+    width: 75vw;
+}
+
+.voteId {
+    margin-right: auto;
+    font-weight: 500;
+    font-size: 1em;
+    padding: 5px 15px 2px;
+}
+
+.voteText {
+    margin-right: auto;
+    font-weight: 400;
+    font-size: 1em;
+    padding: 3px 15px 5px;
+}
+
+.stats {
+    display: flex;
+    justify-content: center;
+}
+
+.another {
+    margin: auto;
+    width: 27px;
+}
+
+.variantCard {
+    background: linear-gradient(to bottom right, rgba(244,253,255,1) 0%, rgba(183,249,255,1) 100%) 100% no-repeat;
+    border-style: solid;
+    border-width: 0.1px;
+    border-color: lightgray;
+    border-radius: 15px;
+    padding: 5px 0;
+    color: black;
+    margin: 15px 15px 0 15px;
+    text-align: start;
+    width: 75vw;
+}
+
+.authBlock {
+    display: flex;
+    justify-content: center;
+}
+
+.authBlockGen {
+    margin-top: 25vh;
+}
+
+.authBlockTop {
+    margin-top: 5vh;
+}
+
+.questionBlock {
+    background: #e6fcff;
+    border-radius: 15px;
+    border-style: solid;
+    border-width: 0.1px;
+    border-color: lightgray;
+    width: 60%;
+    padding: 5px 0;
+}
+
+.flexBox {
+    margin: 5px 0;
+    display: flex;
+    justify-content: center;
+}
+
+.uploadText {
+    font-size: 0.9em;
+}
+
+table, th, td {
+    text-align: center;
+    border-style: solid;
+    border-width: 0.1px;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 5px;
+}
+
+table {
+    margin: 20px 0;
+}
+
+.switchButton {
+    background: linear-gradient(to bottom right, rgba(244,253,255,1) 0%, rgba(183,249,255,1) 100%) 100% no-repeat;
+    padding: 5px;
+    margin: 0px 15px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px gray;
+    cursor: pointer;
+    width: 100px;
+    text-align: center;
+}
+
+.switchButtonActive {
+    background: linear-gradient(to bottom right, rgb(208, 240, 247) 0%, rgb(20, 214, 231) 100%) 100% no-repeat;
+    padding: 5px;
+    margin: 0px 15px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px gray;
+    cursor: pointer;
+    width: 100px;
+    text-align: center;
+}
+
+.statsBlock {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 10px 0;
+}
+
+.greenCell {
+    background: rgb(36, 216, 141);
+}
+
+.tableBlock {
+    overflow-x:auto;
+}
+
+.regButton {
+    text-align: center;
+    text-decoration: underline;
+    margin-bottom: 10px;
+    cursor: pointer;
+}
