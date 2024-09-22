@@ -2,7 +2,7 @@ const useUserSigninHandler = (answer, userManager) => {
     return async (req, res) => {
         const {name, hash} = req.body;  
         if(name && hash) {
-            const result = await userManager.adminSignin(name, hash);
+            const result = await userManager.userSignin(name, hash);
             if (isNaN(parseInt(result))) { 
                 res.json(answer.good(result));
                 return;

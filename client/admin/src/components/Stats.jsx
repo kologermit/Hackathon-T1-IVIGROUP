@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import close from '../assets/close.svg'
 import ReactLoading from "react-loading";
 import { vote } from './vote';
+import axios from 'axios';
 
 const Stats = () => {
     const [appState, setAppState] = useState(0);
@@ -14,10 +15,27 @@ const Stats = () => {
         navigate(`StatsPage/${id}`, { replace: false, state: {id: id} })
     }
 
-    // load votes info
-    // useEffect(() => {
-        // 
-    // }) 
+    useEffect(() => {
+        async function getVoteInfo() {
+            try {
+                var response  = await axios.get('http://kologermit.ru:9002/vote/get-result')
+                if (response.status === 200) {
+                    // vote = response.body;
+                }
+                setAppState(response);
+            } catch (e) {
+                // console.log(e)
+            }
+        }
+
+        async function makeRequest() {
+            setIsLoading(true);
+            await getVoteInfo();
+            setIsLoading(false);
+        }
+    
+        makeRequest();
+    }, [setAppState]) 
 
     return (
         <div>

@@ -6,6 +6,7 @@ import ReactLoading from "react-loading";
 import file from '../assets/file.svg'
 import table from '../assets/table.svg'
 import { categories, view, vote } from './vote';
+import axios from 'axios';
 // import Plotly from 'plotly.js/dist/plotly'
 
 const StatsPage = () => {
@@ -17,6 +18,28 @@ const StatsPage = () => {
 
     var poll = [];
     var srch = false;
+
+    useEffect(() => {
+        async function getVotes() {
+            try {
+                var response  = await axios.get('http://kologermit.ru:9002/vote/get-result')
+                if (response.status === 200) {
+                    // poll = response.body;
+                }
+                setAppState(response);
+            } catch (e) {
+                // console.log(e)
+            }
+        }
+
+        async function makeRequest() {
+            setIsLoading(true);
+            await getVotes();
+            setIsLoading(false);
+        }
+    
+        makeRequest();
+    }, [setAppState])
 
     for (let i = 0; i < vote.length && !srch; i++) {
         if (location.state.id === vote[i].id) {
@@ -91,6 +114,32 @@ const StatsPage = () => {
         }
     }
 
+    const upload = async (type) => {
+        if (type === 'excel') {
+            try {
+                var response = await axios.get('http://kologermit.ru:9002/vote/get-result-excel')
+                if (response.status === 200) {
+                    alert('Выгрузка выполнена успешно');
+                } else {
+                    alert('Не удалось выполнить выгрузку, попробуйте ещё раз');
+                }
+            } catch (e) {
+                // console.log(e)
+            }
+        } else {
+            try {
+                var response = await axios.get('http://kologermit.ru:9002/vote/get-result-json')
+                if (response.status === 200) {
+                    alert('Выгрузка выполнена успешно');
+                } else {
+                    alert('Не удалось выполнить выгрузку, попробуйте ещё раз');
+                }
+            } catch (e) {
+                // console.log(e)
+            }
+        }
+    }
+
     return (
         <div>
         {
@@ -147,15 +196,15 @@ const StatsPage = () => {
                     <div className='statsBlock'>
                         <div className='homeButton'>
                             <img src={table}
-			        		alt='Plus'
+			        		alt='excel'
 			        		className='uploadIcon' />
-                            <div className='uploadText'>Выгрузка в Excel</div>
+                            <div className='uploadText' onClick={() => upload('excel')}>Выгрузка в Excel</div>
                         </div>
                         <div className='homeButton'>
                             <img src={file}
-			        		alt='Graph'
+			        		alt='json'
 			        		className='uploadIcon' />
-                            <div className='uploadText'>Выгрузка в JSON</div>
+                            <div className='uploadText' onClick={() => upload('json')}>Выгрузка в JSON</div>
                         </div>
                     </div>
                     {/* {Object.keys(poll.variants).map(item => (

@@ -4,42 +4,44 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { description, name, questionDesk, questionNames, questions, selected } from './Vars';
 import ReactLoading from "react-loading";
+import { useNavigate } from 'react-router-dom';
 
 
 const Vote = () => {
     const [appState, setAppState] = useState(0);
     const [isLoading, setIsLoading] = useState(false);
+    let navigate = useNavigate();
 
-    // useEffect(() => {
-    //     async function getVariants() {
-    //         try {
-    //             var response  = await axios.get(`https://kologermit.ru:9000`);
-    //             votes = response.data.variants;
-    //             name = response.data.name;
-    //             setAppState(response);
-    //             if (response.status === 200) {
-    //                 // console.log(response);
-    //             }
-    //         } catch (e) {
-    //             // console.log(e)
-    //         }
-    //     }
+    useEffect(() => {
+        async function getVariants() {
+            try {
+                var response  = await axios.get(`https://kologermit.ru:9000`);
+                questionDesk = response.data.questionDesk;
+                name = response.data.name;
+                setAppState(response);
+                if (response.status === 200) {
+                    // console.log(response);
+                }
+            } catch (e) {
+                // console.log(e)
+            }
+        }
 
-    //     async function makeRequest() {
-    //       setIsLoading(true);
-    //       await getVariants();
-    //       setIsLoading(false);
-    //     }
+        async function makeRequest() {
+          setIsLoading(true);
+          await getVariants();
+          setIsLoading(false);
+        }
     
-    //     makeRequest();
-    // })
+        // makeRequest();
+    })
 
     const changeAnswer = (id, index) => {
         selected.set(id, index);
         setAppState(appState + 1);
     }
 
-    const send = () => {
+    const send = async () => {
         var notNull = true
         for (let i = 0; i < Object.keys(questionDesk).length; i++) {
             for (let j = 0; j < Object.keys(questions[0]).length; j++) {
@@ -51,13 +53,26 @@ const Vote = () => {
         
         if (notNull) {
             try {
-                // api request
-                for (let i = 0; i < Object.keys(questionDesk).length; i++) {
-                    for (let j = 0; j < Object.keys(questions[0]).length; j++) {
-                        selected.delete(`${i}_${j}`);
+                var response = await axios.post('https://kologermit.ru:9000/vote/vote', {
+                    "vote_id": 1,
+                    "option": "Python" 
+                }, {
+                    headers: {
+                        'Content-Type': 'application/json'
                     }
+                });
+                if (response.status === 200) {
+                    for (let i = 0; i < Object.keys(questionDesk).length; i++) {
+                        for (let j = 0; j < Object.keys(questions[0]).length; j++) {
+                            selected.delete(`${i}_${j}`);
+                        }
+                    }
+                    navigate(-1);
+                    alert('Вы успешно проголосовали!');
+                } else {
+                    alert('Не удалось отправить результаты голосования, попробуйте ещё раз');
                 }
-                setAppState(0);
+                setAppState(response);
             } catch (e) {
                 // console.log(e)
             }

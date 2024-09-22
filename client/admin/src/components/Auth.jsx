@@ -14,6 +14,10 @@ const Auth = () => {
         view.set('mode', 'auth');
     }
 
+    if (typeof view.get('pass') === 'undefined') {
+        view.set('pass', 'pass');
+    }
+
     const logIn = async (mode) => {
         var login = document.getElementById('login').value;
         var password = document.getElementById('password').value;
@@ -73,9 +77,11 @@ const Auth = () => {
         var pass = document.getElementById('password');
         if (pass.type === "text") {
             pass.type = "password";
+            view.set('pass', 'pass');
             setAppState(appState + 1);
         } else {
             pass.type = "text";
+            view.set('pass', 'text');
             setAppState(appState - 1);
         }
     }
@@ -104,7 +110,7 @@ const Auth = () => {
                         </div>
                         <div className='authBlock'>
                             <div className='regButton' onClick={() => passwordVisibility()}>
-                                {document.getElementById('password').type === 'password' ? 'Показать пароль' : 'Скрыть пароль'} 
+                                {view.get('pass') === 'pass' ? 'Показать пароль' : 'Скрыть пароль'}
                             </div>
                         </div>
                     </div>

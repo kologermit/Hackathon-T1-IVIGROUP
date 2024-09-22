@@ -7,7 +7,7 @@ const useAdminLogoutHandler = (answer, userManager) => {
                 res.json(answer.good(result));
                 return;
             } else {
-                res.json(answer.bad(result));
+                res.json(answer.bad(result)); 
                 return;
             }
         }

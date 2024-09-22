@@ -41,15 +41,15 @@ class UserManager {
         const user = await this.db.getUserByName(name)         
         const auth = await this.authHandler.authRequest(user.id, token);
         if(auth.status === 200) {
-            await this.authHandler.logoutRequest();
+            await this.authHandler.logoutRequest(user.id, token);
             return {
                 status: 200,
-            }
+            } 
         }
         return 400;
     }
 
-    async adminInfo(name, hash){
+    async adminInfo(name, token){
         const user = await this.db.getUserByName(name)         
         const auth = await this.authHandler.authRequest(user.id, token);
         if(auth.status === 200) {
@@ -72,7 +72,7 @@ class UserManager {
             const auth = await this.authHandler.signinRequest(user.id, hash);
             return {
                 status: 200,
-                token: auth.data.token,
+                token: auth.data.token, 
                 name: name
             }
         }
@@ -93,11 +93,11 @@ class UserManager {
         return 400;
     }
 
-    async userLogout(name, hash){
+    async userLogout(name, token){
         const user = await this.db.getUserByName(name)         
         const auth = await this.authHandler.authRequest(user.id, token);
         if(auth.status === 200) {
-            await this.authHandler.logoutRequest();
+            await this.authHandler.logoutRequest(user.id, token);
             return {
                 status: 200,
             }
@@ -105,11 +105,11 @@ class UserManager {
         return 400;
     }
 
-    async userInfo(name, hash){
-        const user = await this.db.getUserByName(name)         
+    async userInfo(name, token){
+        const user = await this.db.getUserByName(name)
         const auth = await this.authHandler.authRequest(user.id, token);
+        console.log('saddddddddddddddddddddddddddddddddddddddddddddddddd')
         if(auth.status === 200) {
-            await this.authHandler.logoutRequest();
             return {
                 status: 200,
                 name: user.name,
@@ -117,7 +117,7 @@ class UserManager {
                 admin: user.admin
             }
         }
-        return 400
+        return 4000
     }
 }
 

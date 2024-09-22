@@ -50,7 +50,7 @@ async function authRequest(id, token) {
 
 async function logoutRequest(id, token) {
     const options = {
-        url: 'http://auth/log-out/',
+        url: 'http://auth:8080/log-out/',
         method: 'GET',
         json: true,
         query: {

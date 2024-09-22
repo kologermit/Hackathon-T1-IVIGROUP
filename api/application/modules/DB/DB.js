@@ -7,7 +7,7 @@ class DB {
             database: "hackathon",
             password: "qwerty",
             port: 3306
-        });
+        }); 
     }
 
 
@@ -80,8 +80,22 @@ class DB {
     }
 
     async insertUserResponceOnQuestions(voteId, voteQuestionId, q1, q2, q3, userId) {
-        let query = "INSERT INTO responce (vote_id, vote_question_id, q1,q2,q3, user_id) VALUES (?,?,?,?,?,?)";
-        return await this.queryHandler(query, [voteId, voteQuestionId, q1, q2, q3, userId], true);
+        const query = "INSERT INTO responce (vote_id, vote_question_id, q1,q2,q3, user_id) VALUES (?,?,?,?,?,?)";
+        await this.queryHandler(query, [voteId, voteQuestionId, q1, q2, q3, userId]);
+    }
+ 
+    async getAdminVotes(id) {
+        let query = "SELECT id, description FROM votes WHERE admin_id=?";
+        return await this.queryHandler(query, [id], true);
+    }
+    async getResponceByUserAndVoteId(voteId, userId) {
+        let query = "SELECT q1,q2,q3 FROM responce WHERE vote_id=?";
+        return await this.queryHandler(query, [voteId, userId], true);
+    }
+
+    async findUsersByQuestions(voteId, userId) {
+        let query = "SELECT DISTINCT user_id FROM responce WHERE vote_id = ?";
+        return await this.queryHandler(query, [voteId], true);
     }
 }
 module.exports = DB;

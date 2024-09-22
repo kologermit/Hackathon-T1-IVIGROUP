@@ -24,6 +24,7 @@ class VoteManager {
                         voteId: voteID,
                     }
                 }
+                return 400;
             }
             return 402;
         }         
@@ -52,9 +53,35 @@ class VoteManager {
         return 400;
     }
 
-    async getVoteResult(name, hash){
-        
-        return 0;
+    async getVoteResult(name, token, voteId){
+        const user = await this.db.getUserByName(name)
+        if (user) {
+            const auth = await this.authHandler.authRequest(user.id, token);
+            let userRes = []
+            if(auth.status === 200) { 
+                if(user.admin === 1) {
+                    const users = await this.db.findUsersByQuestions(voteId, user.id);
+                    console.log(users)
+                    users.forEach(async (obj) => {
+                        let resp = await this.db.getResponceByUserAndVoteId(voteId, obj.id)
+                        userRes.push({
+                            userId: user.id,
+                            name: user.name,
+                            responce: resp
+                        })
+                    })
+                    const votes = await this.db.getResponceByUserAndVoteId(voteId, user.id);
+                    console.log(votes)
+                    return {
+                        status: 200,
+                        usersResp: userRes
+                    }
+                }
+                return 403;
+            }
+            return 402;
+        }         
+        return 400;
     }
 
     async vote(name, token, voteId, vote){
@@ -64,13 +91,31 @@ class VoteManager {
             if(auth.status === 200) { 
                 if(user.admin === 0) {
                     const question_ids = await this.db.getQuestionsIdByVoteId(voteId)
-                    let index = 0
-                    vote.forEach(async(obj) => {
-                        await this.db.insertUserResponceOnQuestions(voteId, question_ids[index].id, obj.q1, obj.q2, obj.q3, user.id)
-                        index++;
+                    vote.forEach(async(obj, index) => {
+                        let qid = question_ids[index].id
+                        await this.db.insertUserResponceOnQuestions(voteId, qid, obj.q1, obj.q2, obj.q3, user.id)
                     })
                     return {
                         status: 200,
+                    }
+                }
+                return 403;
+            }
+            return 402;
+        }         
+        return 400;
+    }
+
+    async adminVotes(name, token){
+        const user = await this.db.getUserByName(name)
+        if (user) {
+            const auth = await this.authHandler.authRequest(user.id, token);
+            if(auth.status === 200) { 
+                if(user.admin === 1) {
+                    const adminVotes = await this.db.getAdminVotes(user.id);
+                    return {
+                        status: 200,
+                        votes: adminVotes
                     }
                 }
                 return 403;

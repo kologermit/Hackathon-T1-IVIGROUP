@@ -10,7 +10,7 @@ const useAdminMeHandler = require('./handlers/useAdminMeHandler');
 const useUserSigninHandler= require('./handlers/useUserSigninHandler');
 const useUserLoginHandler= require('./handlers/useUserLoginHandler');
 const useUserLogoutHandler= require('./handlers/useUserLogoutHandler');
-const useUserMeHandler= require('./handlers/useUserLogoutHandler');
+const useUserMeHandler= require('./handlers/useUserMeHandler');
 
 const useVoteCreateHandler= require('./handlers/useVoteCreateHandler');
 const useVoteGetResultHandler= require('./handlers/useVoteGetResultHandler');
@@ -18,6 +18,8 @@ const useVoteToVoteHandler= require('./handlers/useVoteToVoteHandler');
 const useVoteGetResultExcelHandler= require('./handlers/useVoteGetResultExcelHandler');
 const useVoteGetResultJsonHandler = require('./handlers/useVoteGetResultJsonHandler');
 const useVoteGetHandler = require('./handlers/useVoteGetHandler');
+const useVoteGetAdminVotesHandler = require('./handlers/useVoteGetAdminVotesHandler');
+
 
 const urlencodedParser = express.urlencoded({extended: false});
 
@@ -30,7 +32,7 @@ function Router(userManager, voteManager) {
     router.post('/admin/logout/', urlencodedParser, useAdminLogoutHandler(answer, userManager));
     router.post('/admin/me/', urlencodedParser, useAdminMeHandler(answer, userManager));
     // Юзер
-    router.post('/user/signin/', urlencodedParser, useUserSigninHandler(answer, userManager));
+    router.post('/user/signin/', urlencodedParser, useUserSigninHandler(answer, userManager)); 
     router.post('/user/login/', urlencodedParser, useUserLoginHandler(answer, userManager));
     router.post('/user/logout/', urlencodedParser, useUserLogoutHandler(answer, userManager));
     router.post('/user/me/', urlencodedParser, useUserMeHandler(answer, userManager));
@@ -42,9 +44,10 @@ function Router(userManager, voteManager) {
     router.post('/vote/toVote/', urlencodedParser, useVoteToVoteHandler(answer, voteManager));
     router.post('/vote/getResultExcel/', urlencodedParser, useVoteGetResultExcelHandler(answer, voteManager));
     router.post('/vote/getResultJson/', urlencodedParser, useVoteGetResultJsonHandler(answer, voteManager));
+    router.post('/vote/adminVotes/', urlencodedParser, useVoteGetAdminVotesHandler(answer, voteManager));
 
     router.all('/*', (req, res) => {
-        res.send('Аааай! Не тот вход!..');
+        res.send('ААА');
     });
 
     return router;

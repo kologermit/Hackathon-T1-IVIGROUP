@@ -4,7 +4,7 @@ info:
   description: API для голосования и управления администраторами
   version: 1.0.0
 servers:
-  - url: https://${API_HOST}
+  - url: ${API_HOST}
     description: Production server
 
 paths:
@@ -20,19 +20,18 @@ paths:
             schema:
               type: object
               properties:
-                username:
+                name:
                   type: string
                   example: admin123
-                password:
+                hash:
                   type: string
                   example: yourpassword
       responses:
         '201':
-          description: Успешная регистрация администратора
+          description: Успех
         '400':
           description: Ошибка валидации данных
-
-  /admin/log-in-admin:
+  /admin/login/:
     post:
       summary: Вход администратора
       tags:
@@ -44,50 +43,62 @@ paths:
             schema:
               type: object
               properties:
-                username:
+                name:
                   type: string
                   example: admin123
-                password:
+                hash:
                   type: string
                   example: yourpassword
       responses:
         '200':
-          description: Успешный вход администратора
+          description: Успех
         '401':
           description: Неверные данные
-
-  /admin/log-out-admin:
+  /admin/logout/:
     post:
       summary: Выход администратора
       tags:
         - Admin
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: admin123
+                token:
+                  type: string
+                  example: bd16a322-907c-49d7-b05f-7227b52b57d4
       responses:
         '200':
-          description: Успешный выход администратора
-
-  /admin:
-    get:
-      summary: Получение информации об админе
+          description: Успех
+  /admin/me/:
+    post:
+      summary: Информация об администраторе
       tags:
         - Admin
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: admin123
+                token:
+                  type: string
+                  example: bd16a322-907c-49d7-b05f-7227b52b57d4
       responses:
         '200':
-          description: Данные администратора
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  id:
-                    type: integer
-                    example: 1
-                  username:
-                    type: string
-                    example: admin123
-
-  /user/sign-in:
+          description: Успех
+  /user/signin/:
     post:
-      summary: Регистрация голосующего
+      summary: Регистрация пользователя
       tags:
         - User
       requestBody:
@@ -97,19 +108,20 @@ paths:
             schema:
               type: object
               properties:
-                username:
+                name:
                   type: string
-                  example: voter123
-                password:
+                  example: user123
+                hash:
                   type: string
-                  example: votepassword
+                  example: yourpassword
       responses:
         '201':
-          description: Успешная регистрация голосующего
-
-  /user/log-in:
+          description: Успех
+        '400':
+          description: Ошибка валидации данных
+  /user/login/:
     post:
-      summary: Вход голосующего
+      summary: Вход пользователя
       tags:
         - User
       requestBody:
@@ -119,48 +131,60 @@ paths:
             schema:
               type: object
               properties:
-                username:
+                name:
                   type: string
-                  example: voter123
-                password:
+                  example: user123
+                hash:
                   type: string
-                  example: votepassword
+                  example: yourpassword
       responses:
-        '200':
-          description: Успешный вход голосующего
-        '401':
-          description: Неверные данные
-
-  /user/log-out:
+        '201':
+          description: Успех
+        '400':
+          description: Ошибка валидации данных
+  /user/logout/:
     post:
-      summary: Выход голосующего
+      summary: Выход пользователя
       tags:
         - User
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: user123
+                token:
+                  type: string
+                  example: bd16a322-907c-49d7-b05f-7227b52b57d4
       responses:
         '200':
-          description: Успешный выход
-
-  /user/me:
-    get:
-      summary: Получение данных о себе
+          description: Успех
+  /user/me/:
+    post:
+      summary: Информация о пользователя
       tags:
         - User
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: user123
+                token:
+                  type: string
+                  example: bd16a322-907c-49d7-b05f-7227b52b57d4
       responses:
         '200':
-          description: Информация о пользователе
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  id:
-                    type: integer
-                    example: 1
-                  username:
-                    type: string
-                    example: voter123
-
-  /vote/create-vote:
+          description: Успех
+  /vote/create/:
     post:
       summary: Создание опроса
       tags:
@@ -172,43 +196,41 @@ paths:
             schema:
               type: object
               properties:
-                title:
+                name:
                   type: string
-                  example: Best programming language?
-                options:
-                  type: array
-                  items:
-                    type: string
-                  example: ['Python', 'Java', 'C++']
-      responses:
-        '201':
-          description: Опрос успешно создан
-
-  /vote/get-result:
-    get:
-      summary: Получение результата опроса
-      tags:
-        - Vote
+                  example: admin123
+                token:
+                  type: string
+                  example: bd16a322-907c-49d7-b05f-7227b52b57d4
+                votes:
+                  type: object
+                  properties:
+                    description:
+                      type: string
+                      example: Ваше описание опроса
+                    questions_desc:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          description:
+                            type: string
+                            example: Ваше описание вопроса
+                          q1:
+                            type: string
+                            example: Первый вопрос
+                          q2:
+                            type: string
+                            example: Второй вопрос
+                          q3:
+                            type: string
+                            example: Третий вопрос
       responses:
         '200':
-          description: Результаты опроса
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  vote_id:
-                    type: integer
-                    example: 1
-                  results:
-                    type: object
-                    additionalProperties:
-                      type: integer
-                    example: {'Python': 10, 'Java': 5, 'C++': 2}
-
-  /vote/vote:
+          description: Успех
+  /vote/get/:
     post:
-      summary: Добавление голоса в опрос
+      summary: Получение опроса
       tags:
         - Vote
       requestBody:
@@ -218,39 +240,98 @@ paths:
             schema:
               type: object
               properties:
-                vote_id:
-                  type: integer
-                  example: 1
-                option:
+                name:
                   type: string
-                  example: Python
+                  example: admin123
+                token:
+                  type: string
+                  example: bd16a322-907c-49d7-b05f-7227b52b57d4
+                voteId:
+                  type: integer
+                  example: 12
       responses:
         '200':
-          description: Голос успешно добавлен
-
-  /vote/get-result-excel:
-    get:
-      summary: Выгрузка результата в формате Excel
+          description: Успех
+  /vote/adminVotes/:
+    post:
+      summary: Получение опроса
       tags:
         - Vote
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: admin123
+                token:
+                  type: string
+                  example: bd16a322-907c-49d7-b05f-7227b52b57d4
       responses:
         '200':
-          description: Excel файл с результатами
-          content:
-            application/vnd.openxmlformats-officedocument.spreadsheetml.sheet:
-              schema:
-                type: string
-                format: binary
-
-  /vote/get-result-json:
-    get:
-      summary: Выгрузка результата в формате JSON
+          description: Успех
+  /vote/toVote/:
+    post:
+      summary: Новый результат опроса пользователя
       tags:
         - Vote
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: admin123
+                token:
+                  type: string
+                  example: bd16a322-907c-49d7-b05f-7227b52b57d4
+                voteId:
+                  type: integer
+                  example: 12
+                vote:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      q1:
+                        type: integer
+                        example: 1
+                      q2:
+                        type: integer
+                        example: 2
+                      q3:
+                        type: integer
+                        example: 3       
       responses:
         '200':
-          description: Результаты опроса в формате JSON
-          content:
-            application/json:
-              schema:
-                type: object
+          description: Успех
+  /vote/getResult/:
+    post:
+      summary: Получение опроса
+      tags:
+        - Vote
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: admin123
+                token:
+                  type: string
+                  example: bd16a322-907c-49d7-b05f-7227b52b57d4
+                voteId:
+                  type: integer
+                  example: 12
+      responses:
+        '200':
+          description: Успех

@@ -1,8 +1,8 @@
-const useUserMeHandler = (answer, userManager) => {
+const useVoteGetAdminVotesHandler = (answer, voteManager) => {
     return async (req, res) => {
-        const {name, token} = req.body;
+        const {name, token, voteId, vote} = req.body;
         if(name && token) {
-            const result = await userManager.userInfo(name, token);
+            const result = await voteManager.adminVotes(name, token);
             if (isNaN(parseInt(result))) { 
                 res.json(answer.good(result));
                 return;
@@ -12,8 +12,8 @@ const useUserMeHandler = (answer, userManager) => {
             }
         }
         res.json(answer.bad(400));
-        return;
+        return ;
     }
 };
 
-module.exports = useUserMeHandler;
+module.exports = useVoteGetAdminVotesHandler;
