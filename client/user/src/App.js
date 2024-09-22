@@ -10,7 +10,7 @@ function App() {
       <Routes>
         <Route index element={<Button />} />
         <Route path={'Auth/:id'} element={<Auth />} />
-        <Route path={'Auth/:id/Vote/:id'} element={<Vote />} />
+        <Route path={'Vote/:id'} element={<Vote />} />
       </Routes>
     </div>
   );

@@ -24,70 +24,8 @@ const Vote = () => {
 
     const location = useLocation();
 
-    useEffect(() => {
-        async function getVariants() {
-            try {
-                var response  = await axios.post('http://kologermit.ru:9002/vote/get/', {
-                    "name": user.get("name"),
-                    "token": user.get("token"),
-                    "voteId": location.state.id
-                }, {
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                });
-                questionDesk = response.data.data.vote.question_desc;
-                name = response.data.data.vote.description;
-                setAppState(response);
-                if (response.status === 200) {
-                    // console.log(response);
-                }
-            } catch (e) {
-                alert('Ошибка при выполнении запроса, попробуйте ещё раз');
-                // console.log(e)
-            }
-        }
-
-        async function getColors() {
-            try {
-                var response  = await axios.post('http://kologermit.ru:9002/vote/getConfig/', {
-                    "name": user.get("name"),
-                    "token": user.get("token"),
-                    "voteId": location.state.id
-                }, {
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                });
-                if (response.status === 200) {
-                    if (response.data.data.main_color !== response.data.data.question_color && response.data.data.main_color !== response.data.data.font_color) {
-                        if (response.data.data.main_color !== "null") {
-                            colors.set('mainColor', response.data.data.main_color);
-                        }
-                        if (response.data.data.question_color !== "null") {
-                            colors.set('secondColor', response.data.data.question_color);
-                        }
-                        if (response.data.data.font_color !== "null") {
-                            colors.set('textColor', response.data.data.font_color);
-                        }
-                    }
-                }
-                setAppState(response);
-            } catch (e) {
-                alert('Ошибка при выполнении запроса, попробуйте ещё раз');
-                // console.log(e)
-            }
-        }
-
-        async function makeRequest() {
-          setIsLoading(true);
-          await getVariants();
-          await getColors();
-          setIsLoading(false);
-        }
-    
-        makeRequest();
-    })
+    user.set("name", "za5en@yandex.ru");
+    user.set("token", "5b509568-d5d5-464b-a1c4-3fafca11ff72");
 
     const changeAnswer = (id, index) => {
         selected.set(id, index);

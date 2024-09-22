@@ -25,6 +25,13 @@ const useVoteGetConfigHandler = require('./handlers/useVoteGetConfigHandler');
 
 const urlencodedParser = express.urlencoded({extended: false});
 
+let print_req = (a, b) => {
+    console.log("a")
+    console.log(a)
+    console.log("b")
+    console.log(b)
+}
+
 function Router(userManager, voteManager) {
     const answer = new Answer;
 

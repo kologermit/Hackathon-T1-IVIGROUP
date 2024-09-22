@@ -2,7 +2,7 @@ import './Vote.css';
 import React, { useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom';
 import ReactLoading from "react-loading";
-import { user, view } from './Vars';
+import { colors, name, questionDesk, user, view } from './Vars';
 import axios from 'axios';
 
 const Auth = () => {
@@ -17,6 +17,59 @@ const Auth = () => {
 
     if (typeof view.get('pass') === 'undefined') {
         view.set('pass', 'pass');
+    }
+
+    async function getVariants() {
+        try {
+            var response  = await axios.post('http://kologermit.ru:9002/vote/get/', {
+                "name": user.get("name"),
+                "token": user.get("token"),
+                "voteId": 14
+            }, {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+            if (response.status === 200) {
+                questionDesk = response.data.data.vote.questions_desc;
+                name = response.data.data.vote.description;
+            }
+            setAppState(response);
+        } catch (e) {
+            alert('Ошибка при выполнении запроса, попробуйте ещё раз');
+            // console.log(e)
+        }
+    }
+
+    async function getColors() {
+        try {
+            var response  = await axios.post('http://kologermit.ru:9002/vote/getConfig/', {
+                "name": user.get("name"),
+                "token": user.get("token"),
+                "voteId": 14
+            }, {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+            if (response.status === 200) {
+                if (response.data.data.main_color !== response.data.data.question_color && response.data.data.main_color !== response.data.data.font_color) {
+                    if (response.data.data.main_color !== "null") {
+                        colors.set('mainColor', response.data.data.main_color);
+                    }
+                    if (response.data.data.question_color !== "null") {
+                        colors.set('secondColor', response.data.data.question_color);
+                    }
+                    if (response.data.data.font_color !== "null") {
+                        colors.set('textColor', response.data.data.font_color);
+                    }
+                }
+            }
+            setAppState(response);
+        } catch (e) {
+            alert('Ошибка при выполнении запроса, попробуйте ещё раз');
+            // console.log(e)
+        }
     }
 
     const logIn = async (mode) => {
@@ -38,7 +91,9 @@ const Auth = () => {
                         if (response.status === 200) {
                             user.set('token', response.data.data.token);
                             user.set('name', response.data.data.name);
-                            navigate(`Vote/${location.state.id}`, { replace: true, state: {id: location.state.id} });
+                            await getVariants();
+                            await getColors();
+                            navigate(`../Vote/${location.state.id}`, { replace: true, state: {id: location.state.id} });
                         } else {
                             alert('Ошибка авторизации, попробуйте ещё раз');
                         }
@@ -55,7 +110,9 @@ const Auth = () => {
                         if (response.status === 200) {
                             user.set('token', response.data.data.token);
                             user.set('name', response.data.data.name);
-                            navigate(`Vote/${location.state.id}`, { replace: true, state: {id: location.state.id} });
+                            await getVariants();
+                            await getColors();
+                            navigate(`../Vote/${location.state.id}`, { replace: true, state: {id: location.state.id} });
                         } else {
                             alert('Ошибка регистрации, попробуйте ещё раз');
                         }

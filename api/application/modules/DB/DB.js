@@ -58,9 +58,16 @@ class DB {
 
     async getUserByName(name) {
         let query = "SELECT id, name, hash, admin FROM users WHERE name = ?";
-        user = await this.queryHandler(query, [name]);
+        let user = await this.queryHandler(query, [name]);
+        console.log("name")
+        console.log(name)
         console.log("user")
         console.log(user)
+        if (user === undefined) {
+            return {
+                id: -1
+            }
+        }
         return user;
     }
 
