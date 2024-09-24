@@ -38,12 +38,56 @@ const StatsPage = () => {
 
     // for (let i = 0; poll.length; i++) {
     //     for (let j = 0; poll[i].responce.length; j++) {
-    //         if (poll[i].responce[j].q1 === 1) {
-    //             if (poll[i].responce[j].q2 === 1) {
-
+    //         if (poll[i].responce[j].q1 === 0) {
+    //             if (poll[i].responce[j].q2 === 0) {
+    //             } else if (poll[i].responce[j].q2 === 1) {
     //             }
-    //         } else {
-    //             // 
+    //             } else if (poll[i].responce[j].q2 === 2) {
+    //             }
+    //             } else if (poll[i].responce[j].q2 === 3) {
+    //             }
+    //             } else if (poll[i].responce[j].q2 === 4) {
+    //             }
+    //         } else if (poll[i].responce[j].q1 === 1) {
+    //             if (poll[i].responce[j].q2 === 0) {
+    //             } else if (poll[i].responce[j].q2 === 1) {
+    //             }
+    //             } else if (poll[i].responce[j].q2 === 2) {
+    //             }
+    //             } else if (poll[i].responce[j].q2 === 3) {
+    //             }
+    //             } else if (poll[i].responce[j].q2 === 4) {
+    //             }
+    //         } else if (poll[i].responce[j].q1 === 2) {
+    //             if (poll[i].responce[j].q2 === 0) {
+    //             } else if (poll[i].responce[j].q2 === 1) {
+    //             }
+    //             } else if (poll[i].responce[j].q2 === 2) {
+    //             }
+    //             } else if (poll[i].responce[j].q2 === 3) {
+    //             }
+    //             } else if (poll[i].responce[j].q2 === 4) {
+    //             }
+    //         } else if (poll[i].responce[j].q1 === 3) {
+    //             if (poll[i].responce[j].q2 === 0) {
+    //             } else if (poll[i].responce[j].q2 === 1) {
+    //             }
+    //             } else if (poll[i].responce[j].q2 === 2) {
+    //             }
+    //             } else if (poll[i].responce[j].q2 === 3) {
+    //             }
+    //             } else if (poll[i].responce[j].q2 === 4) {
+    //             }
+    //         } else if (poll[i].responce[j].q1 === 4) {
+    //             if (poll[i].responce[j].q2 === 0) {
+    //             } else if (poll[i].responce[j].q2 === 1) {
+    //             }
+    //             } else if (poll[i].responce[j].q2 === 2) {
+    //             }
+    //             } else if (poll[i].responce[j].q2 === 3) {
+    //             }
+    //             } else if (poll[i].responce[j].q2 === 4) {
+    //             }
     //         }
     //     }
     // }
